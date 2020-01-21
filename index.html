@@ -1,43 +1,38 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="cn">
 <head>
     <meta charset="utf-8">
-    <title>websocket</title>
-
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <title>lc</title>
     <script type="text/javascript">
-        function WebSocketTest()
-        {
+        var socket;
+        $(function(){
             if ("WebSocket" in window)
             {
-                //alert("您的浏览器支持 WebSocket!");
-
-                // 打开一个 web socket
                 var ws = new WebSocket("ws://192.168.251.121:9999/lc");
-
-                ws.onopen = function()
-                {
-                    // Web Socket 已连接上，使用 send() 方法发送数据
-                    ws.send("lc 66666");
-
-                };
-
+                socket = ws;
+                ws.onopen = function(){
+                    ws.send("已上线");
+                }
                 ws.onmessage = function (evt)
                 {
                     var received_msg = evt.data;
                 };
-
                 ws.onclose = function()
                 {
-                    // 关闭 websocket
                     alert("连接已关闭...");
                 };
             }
-
             else
             {
                 // 浏览器不支持 WebSocket
                 alert("浏览器不支持 WebSocket!");
             }
+        });
+
+        function SendMessage(){
+           var message = document.getElementsByName("message");
+           socket.send(message);
         }
     </script>
 
@@ -46,6 +41,13 @@
 
 <div id="sse">
     <a href="javascript:WebSocketTest()">运行 WebSocket</a>
+
+    message: <label>
+        <input name="message" type="text"/>
+    </label>
+    <button onclick="SendMessage()">发送消息</button>
+
+
 </div>
 
 </body>
